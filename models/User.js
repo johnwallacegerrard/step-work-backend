@@ -8,6 +8,11 @@ const StepProgressSchema = new mongoose.Schema({
   completed: { type: Boolean, default: false },
 });
 
+const JournalEntrySchema = new mongoose.Schema({
+  date: { type: Date, default: Date.now },
+  entry: String,
+});
+
 const UserSchema = new mongoose.Schema(
   {
     email: {
@@ -38,9 +43,10 @@ const UserSchema = new mongoose.Schema(
     },
     currentStep: {
       type: Number,
-      default: 0,
+      default: 1,
     },
-    stepProgress: [StepProgressSchema],
+    stepProgress: { type: [StepProgressSchema], default: [] },
+    journal: { type: [JournalEntrySchema], default: [] },
   },
   { timestamps: true }
 );
