@@ -2,8 +2,6 @@ const User = require("../models/User");
 
 const BadRequestError = require("../errors/BadRequestError");
 
-const UnauthorizedError = require("../errors/UnauthorizedError");
-
 const NotFoundError = require("../errors/NotFoundError");
 
 const submitStepAnswers = (req, res, next) => {

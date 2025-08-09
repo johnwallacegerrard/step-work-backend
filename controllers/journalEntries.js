@@ -2,8 +2,6 @@ const User = require("../models/User");
 
 const BadRequestError = require("../errors/BadRequestError");
 
-const UnauthorizedError = require("../errors/UnauthorizedError");
-
 const NotFoundError = require("../errors/NotFoundError");
 
 const submitJournalEntry = (req, res, next) => {
@@ -32,7 +30,5 @@ const submitJournalEntry = (req, res, next) => {
       return next(err);
     });
 };
-
-getJournalEntries = (req, res, next) => {};
 
 module.exports = { submitJournalEntry };

@@ -15,8 +15,7 @@ const ConflictError = require("../errors/ConflictError");
 const JWT_SECRET = require("../utils/config");
 
 const createUser = (req, res, next) => {
-  console.log("req.body:", req.body);
-  const { firstName, lastInitial, email, password } = req.body;
+  const { firstName, lastInitial } = req.body;
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) =>
