@@ -2,16 +2,6 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 
-const StepProgressSchema = new mongoose.Schema({
-  stepNumber: Number,
-  answers: [String],
-  completed: { type: Boolean, default: false },
-});
-
-const JournalEntrySchema = new mongoose.Schema({
-  date: { type: Date, default: Date.now },
-  entry: String,
-});
 
 const UserSchema = new mongoose.Schema(
   {
@@ -45,8 +35,6 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       default: 1,
     },
-    stepProgress: { type: [StepProgressSchema], default: [] },
-    journal: { type: [JournalEntrySchema], default: [] },
   },
   { timestamps: true }
 );

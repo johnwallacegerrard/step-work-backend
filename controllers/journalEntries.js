@@ -1,34 +1,48 @@
-const User = require("../models/User");
-
+const Journal = require("../models/journalEntry");
 const BadRequestError = require("../errors/BadRequestError");
-
+const ForbiddenError = require("../errors/ForbiddenError");
 const NotFoundError = require("../errors/NotFoundError");
 
 const submitJournalEntry = (req, res, next) => {
-  const { _id } = req.user;
   const { entry } = req.body;
+  console.log(req.user);
 
-  User.findByIdAndUpdate(
-    _id,
-    {
-      $push: {
-        journal: {
-          entry,
-        },
-      },
-    },
-    { new: true }
+  Journal.findOneAndUpdate(
+    { owner: req.user._id },
+    { $push: { entries: { entry } } },
+    { new: true, upsert: true }
   )
-    .then((data) => res.status(200).send(data))
+    .then((journal) => res.status(200).send(journal))
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === "ValidationError" || err.name === "CastError") {
         return next(new BadRequestError("Invalid data"));
       }
-      if (err.name === "CastError" || err.name === "DocumentNotFoundError") {
-        return next(new NotFoundError("Not found"));
-      }
-      return next(err);
+      next(err);
     });
 };
 
-module.exports = { submitJournalEntry };
+const getJournal = (req, res, next) => {
+  Journal.findOne({ owner: req.user._id })
+    .then((journal) => {
+      if (!journal) throw new NotFoundError("No journal found");
+      res.status(200).send(journal);
+    })
+    .catch(next);
+};
+
+const deleteJournalEntry = (req, res, next) => {
+  const { entryId } = req.params;
+
+  Journal.findOneAndUpdate(
+    { owner: req.user._id },
+    { $pull: { entries: { _id: entryId } } },
+    { new: true }
+  )
+    .then((journal) => {
+      if (!journal) throw new NotFoundError("No journal found");
+      res.status(200).send(journal);
+    })
+    .catch(next);
+};
+
+module.exports = { submitJournalEntry, getJournal, deleteJournalEntry };
