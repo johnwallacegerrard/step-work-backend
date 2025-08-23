@@ -2,6 +2,12 @@ const express = require("express");
 
 const cors = require("cors");
 
+const { errors } = require("celebrate");
+
+const errorHandler = require("./middleware/error-handler");
+
+const { errorLogger, requestLogger } = require("./middleware/Logger");
+
 const dotenv = require("dotenv");
 
 const mongoose = require("mongoose");
@@ -34,7 +40,11 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(requestLogger);
 app.use("/api", mainRouter);
+app.use(errors());
+app.use(errorHandler);
+app.use(errorLogger);
 
 app.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);

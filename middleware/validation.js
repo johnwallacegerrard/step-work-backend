@@ -2,7 +2,7 @@ const { Joi, celebrate } = require("celebrate");
 
 module.exports.validateRegistration = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().email.required(),
+    email: Joi.string().email().required(),
     password: Joi.string().required(),
     firstName: Joi.string().min(2).max(24).required(),
     lastInitial: Joi.string().min(1).max(1).required(),

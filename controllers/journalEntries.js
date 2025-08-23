@@ -31,11 +31,12 @@ const getJournal = (req, res, next) => {
 };
 
 const deleteJournalEntry = (req, res, next) => {
-  const { entryId } = req.params;
+  const { id } = req.params;
+  console.log(id);
 
   Journal.findOneAndUpdate(
     { owner: req.user._id },
-    { $pull: { entries: { _id: entryId } } },
+    { $pull: { entries: { _id: id } } },
     { new: true }
   )
     .then((journal) => {

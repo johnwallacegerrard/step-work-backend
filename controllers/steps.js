@@ -48,10 +48,10 @@ const submitStepAnswers = (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === "ValidationError" || err.name === "CastError") {
         return next(new BadRequestError("Invalid data"));
       }
-      if (err.name === "CastError" || err.name === "DocumentNotFoundError") {
+      if (err.name === "DocumentNotFoundError") {
         return next(new NotFoundError("Not found"));
       }
       return next(err);
